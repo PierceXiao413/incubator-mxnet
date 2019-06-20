@@ -34,7 +34,6 @@ __all__ = ['zeros', 'ones', 'maximum', 'minimum', 'stack', 'concatenate', 'arang
            'expand_dims', 'tile', 'linspace', 'sin', 'cos', 'sinh', 'cosh', 'log10', 'sqrt', 
            'arctanh', 'tan', 'fix', 'negative']
 
-
 def _num_outputs(sym):
     return len(sym.as_nd_ndarray())
 
@@ -1425,7 +1424,6 @@ def linspace(start, stop, num=50, endpoint=True, retstep=False, dtype=None, axis
     else:
         return _npi.linspace(start=start, stop=stop, num=num, endpoint=endpoint, ctx=ctx, dtype=dtype)
 
-
 def _unary_func_helper(x, fn_array, fn_scalar, out=None, **kwargs):
     """Helper function for unary operators.
 
@@ -1711,5 +1709,3 @@ def negative(x, out=None, where=True, **kwargs):
     """
 
     return _unary_func_helper(x, _npi.negative, _np.negative, out=out)
-
-_set_np_symbol_class(_Symbol)

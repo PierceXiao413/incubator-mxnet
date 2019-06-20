@@ -30,7 +30,6 @@ __all__ = ['zeros', 'ones', 'maximum', 'minimum', 'stack', 'arange', 'argmax',
            'clip', 'split', 'swapaxes', 'expand_dims', 'tile', 'linspace',
            'sin', 'cos', 'sinh', 'cosh', 'log10', 'sqrt', 'arctanh', 'tan', 'fix', 'negative']
 
-
 @set_module('mxnet.ndarray.numpy')
 def zeros(shape, dtype=_np.float32, **kwargs):
     """Return a new array of given shape and type, filled with zeros.
@@ -644,7 +643,7 @@ def tile(A, reps):
 
 
 @set_module('mxnet.ndarray.numpy')
-def linspace(start, stop, num=50, endpoint=True, retstep=False, dtype=None, axis=0, **kwargs):  # pylint: disable=too-many-arguments
+def linspace(start, stop, num=50, endpoint=True, retstep=False, dtype=None, axis=0, **kwargs): #pylint: disable=too-many-arguments
     """Return evenly spaced numbers over a specified interval.
 
     Returns num evenly spaced samples, calculated over the interval [start, stop].
@@ -664,16 +663,15 @@ def linspace(start, stop, num=50, endpoint=True, retstep=False, dtype=None, axis
     endpoint : bool, optional
         If True, stop is the last sample. Otherwise, it is not included.
         Default is True.
-    retstep : bool, optional
+    retstep: bool, optional
         If True, return (samples, step), where step is the spacing between samples.
-    dtype : dtype, optional
+    dtype: dtype, optional
         The type of the output array. If dtype is not given, infer the data
         type from the other input arguments.
     axis : int, optional
         The axis in the result to store the samples. Relevant only if start or
         stop are array-like. By default (0), the samples will be along a new
         axis inserted at the beginning. Use -1 to get an axis at the end.
-
     Returns
     -------
     samples : ndarray
@@ -690,7 +688,7 @@ def linspace(start, stop, num=50, endpoint=True, retstep=False, dtype=None, axis
     axis could only be 0 now.
     """
     if isinstance(start, (list, _np.ndarray, NDArray)) or \
-       isinstance(stop, (list, _np.ndarray, NDArray)):
+        isinstance(stop, (list, _np.ndarray, NDArray)):
         raise NotImplementedError('start and stop only support int')
     if axis != 0:
         raise NotImplementedError("the function only support axis 0")

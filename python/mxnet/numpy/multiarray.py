@@ -48,7 +48,6 @@ __all__ = ['ndarray', 'empty', 'array', 'zeros', 'ones', 'maximum', 'minimum', '
            'clip', 'split', 'swapaxes', 'expand_dims', 'tile', 'linspace', 'sin', 'cos',
            'sinh', 'cosh', 'log10', 'sqrt', 'arctanh', 'tan', 'fix', 'negative']
 
-
 # This function is copied from ndarray.py since pylint
 # keeps giving false alarm error of undefined-all-variable
 def _new_alloc_handle(shape, ctx, delay_alloc, dtype=mx_real_t):
@@ -1868,7 +1867,6 @@ def linspace(start, stop, num=50, endpoint=True, retstep=False, dtype=None, axis
     """
     return _mx_nd_np.linspace(start, stop, num, endpoint, retstep, dtype, axis, **kwargs)
 
-
 @set_module('mxnet.numpy')
 def sin(x, out=None, **kwargs):
     r"""Trigonometric sine, element-wise.
@@ -2135,5 +2133,3 @@ def negative(x, out=None, where=True, **kwargs):
     """
 
     return _mx_nd_np.negative(x, out=out)
-
-
