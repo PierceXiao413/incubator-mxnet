@@ -1867,6 +1867,7 @@ def linspace(start, stop, num=50, endpoint=True, retstep=False, dtype=None, axis
     """
     return _mx_nd_np.linspace(start, stop, num, endpoint, retstep, dtype, axis, **kwargs)
 
+
 @set_module('mxnet.numpy')
 def sin(x, out=None, **kwargs):
     r"""Trigonometric sine, element-wise.
