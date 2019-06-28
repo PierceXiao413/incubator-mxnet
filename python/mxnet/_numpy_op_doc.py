@@ -194,5 +194,13 @@ def _np_broadcast_to(array, shape, subok=False):
              A readonly view on the original array with the given shape. 
              It is typically not contiguous. Furthermore, more than one element of a 
              broadcasted array may refer to a single memory location.
+
+    Examples:
+
+    >>> x = np.array([1, 2, 3])
+    >>> np.broadcast_to(x, (3, 3))
+    array([[1, 2, 3],
+          [1, 2, 3],
+          [1, 2, 3]])
     """
     pass

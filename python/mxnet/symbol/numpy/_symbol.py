@@ -33,6 +33,7 @@ __all__ = ['zeros', 'ones', 'maximum', 'minimum', 'stack', 'concatenate', 'arang
            'clip', 'add', 'subtract', 'multiply', 'divide', 'mod', 'power', 'split', 'swapaxes',
            'expand_dims', 'tile', 'linspace', 'sin', 'cos', 'sinh', 'cosh', 'log10', 'sqrt', 
            'arctanh', 'tan', 'fix', 'negative']
+
 def _num_outputs(sym):
     return len(sym.as_nd_ndarray())
 
@@ -1040,14 +1041,17 @@ def divide(x1, x2, out=None):
     where : symbolic or array, optional
             Values of True indicate to calculate the ufunc at that position, 
             values of False indicate to leave the value in the output alone.
-    **kwargs : For other keyword-only arguments, see the ufunc docs.
 
     Returns:	
     --------
     y : symbolic or scalar 
         Result is scalar if both inputs are scalar, ndarray otherwise.
+    
+    Examples:
+    >>> x = np.arange(5)
+    >>> np.true_divide(x, 4)
+    array([ 0.  ,  0.25,  0.5 ,  0.75,  1.  ])
     """
-
     return _ufunc_helper(x1, x2, _npi.true_divide, _np.divide, _npi.true_divide_scalar,
                          _npi.rtrue_divide_scalar, out)
 
@@ -1253,6 +1257,13 @@ def swapaxes(a, axis1, axis2):
     -------
     a_swapped : _Symbol
                 Swapped array symbol.
+
+    Examples:
+    >>> x = np.array([[1,2,3]])
+    >>> np.swapaxes(x,0,1)
+    array([[1],
+          [2],
+          [3]])     
     """
 
     return _npi.swapaxes(a, dim1=axis1, dim2=axis2)
@@ -1605,6 +1616,7 @@ def arctanh(x, out=None, where=True, **kwargs):
     Inverse hyperbolic tangent element-wise.
 
     Parameters:	
+
     -----------
     x : _Symbol or scalar 
         Input array.
@@ -1617,13 +1629,15 @@ def arctanh(x, out=None, where=True, **kwargs):
     where : array_like, optional
          Values of True indicate to calculate the ufunc at that position, 
          values of False indicate to leave the value in the output alone.
-    **kwargs
-         For other keyword-only arguments, see the ufunc docs.
-
     Returns:	
+
     -------
     out : _Symbol or scalar
           Array of the same shape as x. This is a scalar if x is a scalar.
+    Examples
+
+    >>> np.arctan(0.7)
+    0.8673005276940531
     """
 
     return _unary_func_helper(x, _npi.arctanh, _np.arctanh, out=out, **kwargs)
@@ -1649,14 +1663,15 @@ def tan(x, out=None, where=True, **kwargs):
     where : array_like, optional
             Values of True indicate to calculate the ufunc at that position, 
             values of False indicate to leave the value in the output alone.
-    **kwargs : For other keyword-only arguments, see the ufunc docs.
 
     Returns:	
     -------
     y : _Symbol or scalar 
         The corresponding tangent values. This is a scalar if x is a scalar.
-    r"""
 
+    >>> np.tan(0.5)
+    0.5463024898437905
+    """
     return _unary_func_helper(x, _npi.tan, _np.tan, out=out, **kwargs)
 
 @set_module('mxnet.symbol.numpy')
@@ -1675,7 +1690,12 @@ def fix(x, out=None):
 
     Returns:	
     -------
-    y : Symbol or scalar  
+    y : _Symbol or scalar  
+
+    Examples
+
+    >>> np.fix(3.14)
+    3
     """
     return _unary_func_helper(x, _npi.fix, _np.fix, out=out)
 
@@ -1687,6 +1707,7 @@ def negative(x, out=None, where=True, **kwargs):
     Numerical negative, element-wise.
 
     Parameters:	
+
     ------------
     x : _Symbol or scalar
         Input array.
@@ -1699,186 +1720,16 @@ def negative(x, out=None, where=True, **kwargs):
     where : _Symbol or scalar, optional
             Values of True indicate to calculate the ufunc at that position, 
             values of False indicate to leave the value in the output alone.
-    kwargs For other keyword-only arguments, see the ufunc docs.
 
     Returns: 
     -------
     y : _Symbol or scalar
         Returned array or scalar: y = -x. This is a scalar if x is a scalar.
+
+    Examples
+
+    >>> np.negative(1)
+    -1
     """
+
     return _unary_func_helper(x, _npi.negative, _np.negative, out=out)
-
-def _unary_func_helper(x, fn_array, fn_scalar, out=None, **kwargs):
-    """Helper function for unary operators.
-
-    Parameters
-    ----------
-    x : _Symbol or scalar
-        Input of the unary operator.
-    fn_array : function
-        Function to be called if x is of ``_Symbol`` type.
-    fn_scalar : function
-        Function to be called if x is a Python scalar.
-    out : _Symbol
-        Dummy parameter to keep the consistency with the ndarray counterpart.
-
-    Returns
-    -------
-    out : _Symbol or scalar
-        Result _Symbol or scalar.
-    """
-    if isinstance(x, numeric_types):
-        return fn_scalar(x, **kwargs)
-    elif isinstance(x, _Symbol):
-        return fn_array(x, out=out, **kwargs)
-    else:
-        raise TypeError('type {} not supported'.format(str(type(x))))
-
-
-@set_module('mxnet.symbol.numpy')
-def sin(x, out=None, **kwargs):
-    r"""Trigonometric sine, element-wise.
-
-    Parameters
-    ----------
-    x : _Symbol or scalar
-        Angle, in radians (:math:`2 \pi` rad equals 360 degrees).
-    out : _Symbol or None
-        Dummy parameter to keep the consistency with the ndarray counterpart.
-
-    Returns
-    -------
-    y : _Symbol
-        The sine of each element of x.
-        This is a scalar if `x` is a scalar.
-
-    Notes
-    ----
-    This function only supports input type of float.
-    """
-    return _unary_func_helper(x, _npi.sin, _np.sin, out=out, **kwargs)
-
-
-@set_module('mxnet.symbol.numpy')
-def cos(x, out=None, **kwargs):
-    r"""Cosine, element-wise.
-
-    Parameters
-    ----------
-    x : _Symbol or scalar
-        Angle, in radians (:math:`2 \pi` rad equals 360 degrees).
-    out : _Symbol or None
-        Dummy parameter to keep the consistency with the ndarray counterpart.
-
-    Returns
-    -------
-    y : _Symbol
-        The corresponding cosine values. This is a scalar if x is a scalar.
-
-    Notes
-    ----
-    This function only supports input type of float.
-    """
-    return _unary_func_helper(x, _npi.cos, _np.cos, out=out, **kwargs)
-
-
-@set_module('mxnet.symbol.numpy')
-def sinh(x, out=None, **kwargs):
-    """Hyperbolic sine, element-wise.
-
-    Equivalent to ``1/2 * (np.exp(x) - np.exp(-x))`` or ``-1j * np.sin(1j*x)``.
-
-    Parameters
-    ----------
-    x : _Symbol or scalar
-        Input array or scalar.
-    out : _Symbol or None
-        Dummy parameter to keep the consistency with the ndarray counterpart.
-
-    Returns
-    -------
-    y : _Symbol or scalar
-        The corresponding hyperbolic sine values. This is a scalar if `x` is a scalar.
-
-    Notes
-    ----
-    This function only supports input type of float.
-    """
-    return _unary_func_helper(x, _npi.sinh, _np.sinh, out=out, **kwargs)
-
-
-@set_module('mxnet.symbol.numpy')
-def cosh(x, out=None, **kwargs):
-    """Hyperbolic cosine, element-wise.
-
-    Equivalent to ``1/2 * (np.exp(x) + np.exp(-x))`` and ``np.cos(1j*x)``.
-
-
-    Parameters
-    ----------
-    x : _Symbol or scalar
-        Input array or scalar.
-    out : ndarray or None
-        Dummy parameter to keep the consistency with the ndarray counterpart.
-
-    Returns
-    -------
-    y : _Symbol or scalar
-        The corresponding hyperbolic cosine values. This is a scalar if `x` is a scalar.
-
-    Notes
-    ----
-    This function only supports input type of float.
-    """
-    return _unary_func_helper(x, _npi.cosh, _np.cosh, out=out, **kwargs)
-
-
-@set_module('mxnet.symbol.numpy')
-def log10(x, out=None, **kwargs):
-    """Return the base 10 logarithm of the input array, element-wise.
-
-    Parameters
-    ----------
-    x : _Symbol or scalar
-        Input array or scalar.
-    out : _Symbol or None
-        Dummy parameter to keep the consistency with the ndarray counterpart.
-
-    Returns
-    -------
-    y : _Symbol or scalar
-        The logarithm to the base 10 of `x`, element-wise. NaNs are
-        returned where x is negative. This is a scalar if `x` is a scalar.
-
-    Notes
-    ----
-    This function only supports input type of float.
-    """
-    return _unary_func_helper(x, _npi.log10, _np.log10, out=out, **kwargs)
-
-
-@set_module('mxnet.symbol.numpy')
-def sqrt(x, out=None, **kwargs):
-    """
-    Return the non-negative square-root of an array, element-wise.
-
-    Parameters
-    ----------
-    x : _Symbol or scalar
-        The values whose square-roots are required.
-    out : _Symbol, or None, optional
-        Dummy parameter to keep the consistency with the ndarray counterpart.
-
-    Returns
-    -------
-    y : _Symbol or scalar
-        An array of the same shape as `x`, containing the positive
-        square-root of each element in `x`. This is a scalar if `x` is a scalar.
-
-    Notes
-    ----
-    This function only supports input type of float.
-    """
-    return _unary_func_helper(x, _npi.sqrt, _np.sqrt, out=out, **kwargs)
-
-_set_np_symbol_class(_Symbol)
